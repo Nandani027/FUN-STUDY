@@ -44,5 +44,3 @@ https://nandani027.github.io/FUN-STUDY/
 - **Member 4** – Saniya Parbeen
 
 
-git clone https://github.com/your-username/FUN-STUDY.git
-cd FUN-STUDY
