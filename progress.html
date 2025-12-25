@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture Progress Tracker</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color:black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f5f7fa; /* subtle bg */
+  }
+
+  .mobile-frame{
+    width: 350px;
+    height: 650px;
+    background: linear-gradient(to right, #4568dc, #b06ab3);
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .notch{
+    width: 160px;
+    height: 25px;
+    background: #000;
+    border-radius: 12px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+  }
+
+  /* Back Button */
+  .back-button {
+    background: linear-gradient(135deg,#4a90e2,#0077b6);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 13px 38px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 45px; 
+    margin-left:80px;
+    align-self: flex-start;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+  }
+  .back-button:hover {
+    background: linear-gradient(135deg,#005f99,#004080);
+    transform: scale(1.05);
+  }
+
+  .container {
+    background: #ffffff; /* solid white for clarity */
+    padding: 35px;
+    border-radius: 20px;
+    width: 80%;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    margin-top:8px;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color:#0077b6;
+  }
+
+  .progress-section {
+    margin-bottom: 50px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color:#333;
+  }
+
+  .progress-bar {
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 14px;
+    margin-bottom: 10px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #00e676;
+    transition: width 0.5s;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="mobile-frame">
+  <div class="notch"></div>
+
+  
+  <div class="container">
+    <h1>📚 Lecture Progress</h1>
+
+    <div class="progress-section">
+     
+      <div class="progress-label">
+        <span>Science</span><span id="science-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="science-progress"></div>
+      </div>
+
+      <div class="progress-label">
+        <span>Technology</span><span id="technology-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="technology-progress"></div>
+      </div>
+
+      <div class="progress-label">
+        <span>Engineering</span><span id="engineering-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="engineering-progress"></div>
+      </div>
+       <div class="progress-label">
+        <span>Math</span><span id="math-percent">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="math-progress"></div>
+      </div>
+
+    </div>
+
+    <canvas id="progressChart" width="300" height="200"></canvas>
+
+    <!-- Back Button -->
+  <button class="back-button" onclick="location.href='Leaderboard.html'">← Back</button>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Temporary values for demo
+  
+  const scienceProgress = 45;
+  const technologyProgress = 90;
+ 
+  const engineeringProgress = 60;
+   const mathProgress = 70;  
+
+  // Fill bars
+  
+  document.getElementById('science-progress').style.width = scienceProgress + '%';
+  document.getElementById('technology-progress').style.width = technologyProgress + '%';
+   document.getElementById('engineering-progress').style.width = engineeringProgress + '%';
+
+  document.getElementById('math-progress').style.width = mathProgress + '%';
+ 
+  // Update text
+ 
+  document.getElementById('science-percent').textContent = scienceProgress + '%';
+  document.getElementById('technology-percent').textContent = technologyProgress + '%';
+
+  document.getElementById('engineering-percent').textContent = engineeringProgress + '%';
+   document.getElementById('math-percent').textContent = mathProgress + '%';
+
+  // Chart.js graph
+  const ctx = document.getElementById('progressChart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [ 'Science', 'Technology', 'Engineering', 'Math'],
+      datasets: [{
+        label: 'Lecture Completion %',
+        data: [mathProgress, scienceProgress, technologyProgress, engineeringProgress],
+        backgroundColor: ['#00e676','#ffcc00','#2196f3','#ff7043'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { color: '#333' },
+          grid: { color: 'rgba(0,0,0,0.1)' }
+        },
+        x: {
+          ticks: { color: '#333' },
+          grid: { color: 'rgba(0,0,0,0.1)' }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

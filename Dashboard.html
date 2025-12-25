@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body {
+      margin-top: 60px;
+     justify-items: center;
+     align-items: center;
+    }
+    .mobile-frame{
+    width: 350px;
+    height: 650px;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: relative;
+    
+}
+.notch{
+    width: 160px;
+    height: 25px;
+    background: #000;
+    border-radius: 12px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+}
+ .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, #4a90e2, #0077b6);
+      padding: 12px 20px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .navbar .left {
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .navbar .right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 20px;
+    }
+
+    /* Secondary Menu Bar */
+    .menu-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      background: #f1f5f9;
+      padding: 10px;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+        .menu-bar button {
+      background: linear-gradient(135deg, #ffffff, #e6f2ff);
+      border: none;
+      border-radius: 25px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0077b6;
+      font-size: 14px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .menu-bar button:hover {
+      background: #caf0f8;
+      transform: scale(1.08);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+    .third-bar {
+    background: #f1f5f9;
+    color: #0077b6;
+    padding: 10px;
+    margin-left: 250px;
+}
+
+  .user-dropdown {
+  background: #4a90e2;        /* same blue as navbar */
+  color: #fff;
+  border: none;
+  width:50px;
+  height:45px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.user-dropdown option {
+  color: #333;                /* inside dropdown text color */
+  background: #fff;
+}
+
+.user-dropdown:focus {
+  outline: none;
+}
+.container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .card {
+      background: white;
+      padding: 40px 25px;
+      width: 260px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 18px 35px rgba(0,0,0,0.25);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 150%;
+      background: radial-gradient(circle, rgba(74,144,226,0.15) 0%, transparent 70%);
+      transform: rotate(30deg);
+      transition: opacity 0.4s;
+      opacity: 0;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-size: 22px;
+    }
+
+    .icon {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
+
+    .card button {
+      background: linear-gradient(135deg, #4a90e2, #0077b6);
+      color: white;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .card button:hover {
+      background: linear-gradient(135deg, #005f99, #004080);
+      transform: scale(1.08);
+    }
+     .card a {
+  position: relative;
+  z-index: 10;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="mobile-frame">
+  <div class="notch"></div>
+  <!-- Top Navbar -->
+  <div class="navbar">
+    <div class="left">
+      <img src="olaf.jpg" width="40px" height="40px" style="border-radius: 50%;">
+      </div>
+     <div class="right">
+      <span>⚙</span>
+      <span>❓</span>
+      <select class="user-dropdown" onchange="handleUserAction(this.value)">
+    <option selected hidden>👤</option>
+    <option value="logout">Logout</option>
+  </select>
+    </div>
+  </div>
+  
+  <!-- Secondary Menu -->
+  <div class="menu-bar">
+    
+    <button style="background: yellow;">DASHBOARD</button>
+    
+    
+  </div>
+      <div class="third-bar">
+        <div class="icon-bar">
+            <select id="class-select">
+                <option value="select">Class</option>
+                <option value="class">Class-6</option>
+                <option value="class">Class-7</option>
+                <option value="class">Class-8</option>
+                <option value="class">Class-9</option>
+                <option value="class">Class-10</option>
+                <option value="class">Class-11</option>
+                <option value="class">Class-12</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+    <div class="card"
+    style="background-image: url(progress.jpg);
+      background-size: cover; height:125px; width:110px;">
+      <!-- <div class="icon">🎯</div> -->
+      <h2 style="color:black;  font-size:20px;">Student Progress</h2>
+      <button style="font-size: 12px;">View→</button>
+    </div>
+    <div class="card"
+    style="background-image: url(score.jpg);
+      background-size: cover; height:125px; width:110px;"
+    >
+      <!-- <div class="icon">🎮</div> -->
+      <h2 style="color:black; font-size:20px;">Quiz Score of Students</h2>
+      <button style="font-size: 12px;">View→</button>
+    </div>
+    <div class="card"
+    style="background-image: url(manage.jpg);
+      background-size: cover; height:125px; width:110px;">
+      <!-- <div class="icon">🏆</div> -->
+      <h2 style="color:black; ">Manage Lessons</h2>
+      <button style="font-size: 12px;">View→</button>
+    </div>
+        
+  </div>
+
+<script>
+function handleUserAction(value) {
+  if (value === 'logout') {
+    // Example 1: Redirect to login page
+    window.location.href = '1login.html'; 
+    
+    // Example 2: Clear any stored session/localStorage if you’re using it
+    // localStorage.clear();
+    // sessionStorage.clear();
+  }
+}
+</script>
+</body>
+</html>

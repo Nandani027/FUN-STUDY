@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gamified Quiz</title>
+  <link rel="stylesheet" href="https://h5p.org/sites/all/modules/h5p/library/styles/h5p.css">
+  <script src="https://h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js" charset="UTF-8"></script>
+  <style>
+    body { font-family:'Times New Roman', Times, serif;
+       background: #f8f8f8;
+        text-align: center;
+         padding: 20px; 
+         color:darkblue;
+         justify-items:center;
+         margin-top:60px;
+         }
+    .quiz-container { max-width: 600px; height:auto;}
+    button { padding: 10px 20px; font-size: 16px; margin-top: -16px; border-radius: 8px; border: none; background:darkblue; color: white; }
+    button:hover { background: #0056b3; }
+    .mobile-frame{
+    width: 300px;
+    height: 600px;
+    background: linear-gradient(135deg, #8EC5FC 0%, #E0C3FC 100%); border-radius: 35px;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: relative;
+    
+    
+}
+.notch{
+    width: 160px;
+    height: 25px;
+    background: #000;
+    border-radius: 12px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%)
+}
+  </style>
+</head>
+<body>
+    <div class="mobile-frame">
+  <div class="notch"></div>
+
+  <h2>SCIENCE QUIZ</h2>
+  <p style="margin-top: -20px;">Click to load your interactive quiz.</p>
+
+  <button id="loadQuizBtn">Start Quiz</button>
+  <div id="quizArea" class="quiz-container"></div>
+  <br>
+  <button type="button" id="back-button" onclick="location.href='play.html'" >Back</button>
+
+  <script>  document.getElementById("loadQuizBtn").addEventListener("click", function() {
+      document.getElementById("quizArea").innerHTML = `<iframe src="https://h5p.org/h5p/embed/977132" width="711" height="100" frameborder="0" allowfullscreen="allowfullscreen" allow="geolocation *; microphone *; camera *; midi *; encrypted-media *" title="7 class photosynthesis quiz"></iframe>`
+      attachXAPIListener();
+    });
+
+    // Listen to xAPI events for progress tracking
+    function attachXAPIListener() {
+      // Wait a bit to ensure iframe & H5P are loaded
+      setTimeout(() => {
+        if (window.H5P && H5P.externalDispatcher) {
+          H5P.externalDispatcher.on('xAPI', function(event) {
+            if(event.data.statement.result) {
+              let result = event.data.statement.result;
+              let score = result.score ? result.score.raw : 0;
+              let maxScore = result.score ? result.score.max : 0;
+
+              // Send data to Strapi backend
+              fetch('https://your-strapi-server.com/api/progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  studentId: "123", // Replace with dynamic student ID
+                  quizId: "1095",
+                  score: score,
+                  maxScore: maxScore,
+                  timestamp: new Date().toISOString()
+                })
+              })
+              .then(res => console.log("Progress saved:", res))
+              .catch(err => console.error("Error saving progress", err));
+            }
+          });
+        } else {
+          console.warn("H5P not yet available. Retrying...");
+          attachXAPIListener(); // Retry until ready
+        }
+      }, 1000); // Delay to allow quiz iframe to load
+    }
+    </script>
+
+</body>
+</html>

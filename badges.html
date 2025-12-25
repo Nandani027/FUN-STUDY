@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Badges</title>
+  <style>
+    body {
+      margin: 0;
+      
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Mobile Frame */
+    .mobile-frame {
+      width: 360px;
+      height: 640px;
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    
+    
+    .notch{
+      width: 160px;
+      height: 25px;
+      background: #000;
+      border-radius: 12px;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translate(-50%)
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.6em;
+      margin-bottom: 20px;
+      color: #444;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      align-items: stretch;
+      flex-grow: 1;
+    }
+
+    .badge {
+      background: linear-gradient(135deg,#f6d365,#fda085);
+      border-radius: 16px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 200px;   /* equal height */
+    }
+
+    .badge:hover {
+      transform: scale(1.05);
+    }
+
+    .badge img {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 8px;
+    }
+
+    .badge h3 {
+      font-size: 1em;
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .badge p {
+      font-size: 0.85em;
+      color: #555;
+    }
+
+    /* Third badge spanning full width */
+    .badge.center {
+      grid-column: span 2;
+      height: 140px;
+      margin-left:40px;
+      width:220px;
+    }
+
+    /* Back button */
+    .back-btn {
+      margin-top: 10px;
+      padding: 12px;
+      background: #66a6ff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      width: 50%;
+      margin-left: 80px;
+    }
+
+    .back-btn:hover {
+      background: #4a90e2;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-frame">
+     <div class="notch"></div>
+    <h1>🏅 My Badges</h1>
+    <div class="badge-grid">
+      
+      <!-- Weekly Lecture Badge -->
+      <div class="badge">
+        <img src="https://img.icons8.com/color/96/teacher.png" alt="Lecture Badge">
+        <h3>Lecture Star</h3>
+        <p>Completed Weekly Lecture</p>
+      </div>
+
+      <!-- Weekly Quiz Badge -->
+      <div class="badge">
+        <img src="https://img.icons8.com/color/96/test-passed.png" alt="Quiz Badge">
+        <h3>Quiz Master</h3>
+        <p>Completed Weekly Quiz</p>
+      </div>
+
+      <!-- Weekly Challenge Badge (centered full width) -->
+      <div class="badge center">
+        <img src="https://img.icons8.com/color/96/trophy.png" alt="Challenge Badge">
+        <h3>Challenge Champ</h3>
+        <p>Completed Weekly Challenge</p>
+      </div>
+
+    </div>
+
+    <!-- Back Button -->
+    <button class="back-btn" onclick="location.href='Leaderboard.html'">⬅ Back</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Math Quiz Grid</title>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+<style>
+body { 
+    margin: 0; 
+    background:#fff; 
+    margin-top:60px ;
+      padding: 0; 
+      min-height: 100vh;
+      justify-items: center;
+}
+
+.mobile-frame{
+    width: 350px;    
+    height: 600px;   
+     background: linear-gradient(to right, #03001e, #7303c0, #ec38bc);
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: relative;
+    margin: auto;
+    align-items: center;
+}
+.notch{
+    width: 160px;
+    height: 25px;
+    background: #000;
+    border-radius: 12px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+}
+h2 { color: #fff; text-shadow: 2px 2px 5px rgba(0,0,0,0.4); }
+button { 
+    margin: 5px; 
+    padding: 12px 20px; 
+    border: none; 
+    background-color:khaki;
+    border-radius: 10px; 
+    font-size: 16px; 
+    cursor: pointer; 
+}
+#game-container{
+    width: 100%;
+    height: 400px; /* fit nicely inside mobile-frame */
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<div class="mobile-frame">
+    <div class="notch"></div>
+    <h2>Math Wizard! Choose your answers</h2>
+    <div id="game-container"></div>
+    <button type="button" id="back-button" onclick="location.href='play.html'" >Back</button>
+</div>
+
+<script>
+const GAME_WIDTH = 350;
+const GAME_HEIGHT = 400;
+
+const config = {
+    type: Phaser.AUTO,
+    width: GAME_WIDTH,
+    height: GAME_HEIGHT,
+    parent: 'game-container',
+    backgroundColor: '#dbeafe',
+    scene: { preload, create, update }
+};
+
+const game = new Phaser.Game(config);
+
+let score = 0;
+let questionText;
+let blocks = [];
+let correctAnswer;
+let scoreText;
+let player;
+
+function preload(){
+    this.load.image('player', 'https://labs.phaser.io/assets/sprites/phaser-dude.png');
+}
+
+function create(){
+    const scene = this;
+
+    const graphics = scene.add.graphics();
+    graphics.fillGradientStyle(0x93c5fd,0x60a5fa,0x60a5fa,0x93c5fd,1)
+            .fillRect(0,0,GAME_WIDTH,GAME_HEIGHT);
+
+    scoreText = scene.add.text(10,10, 'Score: 0', {font:'20px Comic Sans MS', fill:'#000'});
+    questionText = scene.add.text(GAME_WIDTH/2, 40, '', {font:'20px Comic Sans MS', fill:'#111'}).setOrigin(0.5);
+
+    createBlocks(scene);
+
+    player = scene.add.sprite(GAME_WIDTH/2, GAME_HEIGHT-50, 'player').setScale(2).setDepth(1);
+
+    generateQuestion(scene);
+}
+
+function update(){}
+
+function createBlocks(scene){
+    blocks = []; // clear previous blocks if any
+    const cols = 4, rows = 3;
+    const spacingX = 70, spacingY = 80;
+    const offsetX = spacingX/2;
+    const offsetY = 100;
+    const radius = 25;
+
+    for(let row=0; row<rows; row++){
+        for(let col=0; col<cols; col++){
+            const x = offsetX + col*spacingX + 10;
+            const y = offsetY + row*spacingY;
+            const color = randomColor();
+
+            const circle = scene.add.circle(x, y, radius, color).setInteractive({useHandCursor:true});
+            const text = scene.add.text(x, y, '', {font:'16px Comic Sans MS', fill:'#fff'}).setOrigin(0.5);
+            circle.textObj = text;
+
+            circle.on('pointerdown', ()=>onBlockClicked(scene, circle));
+            blocks.push(circle);
+        }
+    }
+}
+
+function generateQuestion(scene){
+    const a = Phaser.Math.Between(1,15);
+    const b = Phaser.Math.Between(1,15);
+    correctAnswer = a + b;
+    questionText.setText(`What is ${a} + ${b} ?`);
+
+    const answers = [correctAnswer];
+    while(answers.length < blocks.length){
+        let wrong = Phaser.Math.Between(2,30);
+        if(!answers.includes(wrong)) answers.push(wrong);
+    }
+    Phaser.Utils.Array.Shuffle(answers);
+
+    blocks.forEach((block,i)=>{
+        block.answer = answers[i];
+        block.textObj.setText(answers[i]);
+        block.fillColor = randomColor();
+        block.scale = 1;
+        block.alpha = 1;
+
+        block.isGolden = false;
+        if(Math.random()<0.1){
+            block.isGolden = true;
+            block.fillColor = 0xffd700;
+        }
+    });
+}
+
+function onBlockClicked(scene, block){
+    scene.tweens.add({
+        targets: player,
+        x: block.x,
+        y: block.y - 30,
+        duration: 300,
+        ease: 'Power2',
+        onComplete: ()=>{
+            if(block.answer === correctAnswer){
+                let points = block.isGolden ? 20 : 10;
+                score += points;
+                scoreText.setText(`Score: ${score}`);
+
+                scene.tweens.add({
+                    targets: block,
+                    scale: 1.3,
+                    duration: 150,
+                    yoyo: true,
+                    ease: 'Power1'
+                });
+
+                const floating = scene.add.text(block.x, block.y-40, `+${points}`, {font:'16px Comic Sans MS', fill:'#22c55e'}).setOrigin(0.5);
+                scene.tweens.add({
+                    targets: floating,
+                    y: floating.y-30,
+                    alpha: 0,
+                    duration: 800,
+                    onComplete: ()=>floating.destroy()
+                });
+
+                scene.time.delayedCall(300, ()=>generateQuestion(scene));
+            } else {
+                scene.tweens.add({
+                    targets: block,
+                    x: block.x - 5,
+                    duration: 50,
+                    yoyo: true,
+                    repeat: 3,
+                    ease: 'Power1'
+                });
+                score = Math.max(0, score-5);
+                scoreText.setText(`Score: ${score}`);
+            }
+        }
+    });
+}
+
+function randomColor(){
+    const colors = [0xf87171, 0xfbbf24, 0x34d399, 0x60a5fa, 0xa78bfa, 0xf472b6];
+    return colors[Phaser.Math.Between(0, colors.length-1)];
+}
+</script>
+</body>
+</html>

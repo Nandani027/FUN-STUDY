@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fun & Study Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .mobile-frame {
+      width: 350px;
+      max-width: 95%;
+      height: 600px;
+      background: linear-gradient(194deg, rgb(142,203,247), white, rgb(170,213,245));
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      padding: 18px;
+      position: relative;
+      
+    }
+    .notch {
+      width: 160px;
+      height: 25px;
+      background: #000;
+      border-radius: 12px;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .header {
+      text-align: center;
+      margin-top: 44px;
+    }
+    .header img {
+      width:200;
+      height: 100px;
+      object-fit: contain;
+      display: block;
+      margin: 4px auto;
+    }
+    h2 {
+      margin: 6px 0;
+      font-size: 22px;
+      color: #333;
+    }
+    p {
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.2s, transform 0.12s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .admin { background: #c0392b; }
+    .teacher { background: #27ae60; }
+    .student { background: #0984e3; }
+
+    .form-box {
+      display: none;
+      margin-top: 8px;
+      text-align: left;
+      animation: fadeIn 0.25s ease-in-out;
+      background: rgba(255,255,255,0.92);
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .form-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .login-submit {
+      background: #ff9800;
+      margin-top: 8px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .login-submit:hover { background: #fb8c00; }
+    .links {
+      margin-top: 9px;
+      font-size: 13px;
+      text-align: center;
+      color: #222;
+    }
+    .links a { color: #0757d1; text-decoration: none; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 420px) {
+      .mobile-frame { height: auto; padding-bottom: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-frame">
+    <div class="notch"></div>
+
+    <div class="header">
+      <h2>Welcome To</h2>
+      <!-- replace logo.jpg with your real image or SVG -->
+      <img src="logo.jpg" alt="Fun & Study Logo">
+      <p><strong>Select your role to continue</strong></p>
+    </div>
+
+    <!-- Admin -->
+    <button class="btn admin" type="button" onclick="toggleForm('adminForm')">Admin Login</button>
+    <div id="adminForm" class="form-box">
+      <form id="adminLoginForm" onsubmit="adminLogin(event)">
+        <input type="text" id="adminUser" placeholder="Admin Id (Please Input: @admin)" autocomplete="username" />
+        <input type="password" id="adminPass" placeholder="Admin Password (Please Input: admin123)" autocomplete="current-password" />
+        <button type="submit" class="login-submit">Login as Admin</button>
+      </form>
+    </div>
+
+    <!-- Teacher -->
+    <button class="btn teacher" type="button" onclick="toggleForm('teacherForm')">Teacher Login</button>
+    <div id="teacherForm" class="form-box">
+      <form id="teacherLoginForm" onsubmit="teacherLogin(event)">
+        <input type="text" id="teacherUser" placeholder="Teacher Id (Please Input: @teacher)" autocomplete="username" />
+        <input type="password" id="teacherPass" placeholder="Teacher Password (Please Input: teacher123)" autocomplete="current-password" />
+        <button type="submit" class="login-submit">Login as Teacher</button>
+      </form>
+    </div>
+
+    <!-- Student -->
+    <button class="btn student" type="button" onclick="toggleForm('studentForm')">Student Login</button>
+    <div id="studentForm" class="form-box">
+      <form id="studentLoginForm" onsubmit="studentLogin(event)">
+        <input type="text" id="studentUser" placeholder="Student Id (Please Input: @student)" autocomplete="username" />
+        <input type="password" id="studentPass" placeholder="Student Password (Please Input: student123)" autocomplete="current-password" />
+        <button type="submit" class="login-submit">Login as Student</button>
+      </form>
+    </div>
+
+    <div class="links">
+      <p>Forgot your password? <a href="#">Reset here</a></p>
+      <p>Don’t have an account? <a href="#">Sign up</a></p>
+    </div>
+  </div>
+
+  <script>
+    // demo credentials — replace with server-side auth in production
+    const adminCredentials   = { user: '@admin',   password: 'admin123' };
+    const teacherCredentials = { user: '@teacher', password: 'teacher123' };
+    const studentCredentials = { user: '@student', password: 'student123' };
+
+    // Toggle: show selected form, hide others
+    function toggleForm(formId) {
+      const ids = ['adminForm', 'teacherForm', 'studentForm'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        // if clicked form and it's currently hidden -> show; otherwise hide
+        if (id === formId) {
+          el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        } else {
+          el.style.display = 'none';
+        }
+      });
+      // scroll visible form into view on small screens
+      const visible = document.getElementById(formId);
+      if (visible && visible.style.display === 'block') visible.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Admin login handler
+    function adminLogin(e) {
+      if (e) e.preventDefault();
+      const user = document.getElementById('adminUser').value.trim();
+      const pass = document.getElementById('adminPass').value;
+      if (!user || !pass) {
+        alert('Please enter admin username and password.');
+        return;
+      }
+      if (user === adminCredentials.user && pass === adminCredentials.password) {
+        // demo redirect — point to your real admin page
+        window.location.href = 'admin.html';
+      } else {
+        alert('Invalid admin credentials.');
+      }
+    }
+
+    // Teacher login handler
+    function teacherLogin(e) {
+      if (e) e.preventDefault();
+      const user = document.getElementById('teacherUser').value.trim();
+      const pass = document.getElementById('teacherPass').value;
+      if (!user || !pass) { alert('Please enter teacher username and password.'); return; }
+      if (user === teacherCredentials.user && pass === teacherCredentials.password) {
+        window.location.href = 'Dashboard.html';
+      } else {
+        alert('Invalid teacher credentials.');
+      }
+    }
+
+    // Student login handler
+    function studentLogin(e) {
+      if (e) e.preventDefault();
+      const user = document.getElementById('studentUser').value.trim();
+      const pass = document.getElementById('studentPass').value;
+      if (!user || !pass) { alert('Please enter student username and password.'); return; }
+      if (user === studentCredentials.user && pass === studentCredentials.password) {
+        window.location.href = 'About Student.html';
+      } else {
+        alert('Invalid student credentials.');
+      }
+    }
+
+    // Optional: Close forms if user clicks outside the mobile frame (small UX nicety)
+    document.addEventListener('click', (ev) => {
+      const frame = document.querySelector('.mobile-frame');
+      if (!frame.contains(ev.target)) {
+        ['adminForm','teacherForm','studentForm'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

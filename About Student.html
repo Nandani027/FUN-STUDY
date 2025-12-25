@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+  font-family: Arial, sans-serif;
+  justify-items: center;
+  align-items: center;
+  margin-top: 5%;
+  font-weight: 700;
+  
+}
+.mobile-frame{
+    width: 350px;
+    height: 600px;
+    background: #fff;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: relative;
+}
+.notch{
+    width: 160px;
+    height: 25px;
+    background: #000;
+    border-radius: 12px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.container-img {
+  position: relative;
+  overflow: hidden; /* so the pseudo-element stays contained */
+}
+
+.container-img::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  background-image: url("board.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(3px);
+  border-radius:30px;
+  z-index: 0; /* behind the content */
+}
+
+.container {
+  width: 310px;
+  height:350px;
+  position: relative; /* so it sits above the pseudo-element */
+  z-index: 1;
+  background: rgba(255,255,255,0.3); /* optional: semi-transparent backdrop */
+  border-radius: 30px;
+  padding: 20px;
+}
+
+
+#class-options {
+  margin-left: 20px;
+}
+
+#back-button, #continue-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#back-button {
+  background-color: #ccc;
+}
+
+#continue-button {
+  background-color: #4CAF50;
+  color: #fff;
+}
+.mobile-frame{
+  background-image: url("lolo2.0.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+    </style>
+</head>
+<body>
+  <div class="mobile-frame">
+        <div class="notch"></div><br>
+                <h2 align="center">About Student</h2>
+                 <p align="center">Customize your profile</p>
+
+    <div class="container-img">
+      <div class="container">
+                    <div class="icon-bar">
+            <select id="language-select">
+                <option value="select">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Regional">Regional</option>
+            </select>
+        </div><br><br>
+    <!-- <h2>About Student</h2> -->
+    <!-- <p>Customize your profile</p> -->
+    <form id="student-profile-form">
+      <label for="school-location">School Location:</label>
+      <input type="text" id="school-location" name="school-location" placeholder="city, state" required>
+      <br><br>
+      <label for="class" required >Class:</label>
+      <div id="class-options">
+        <input type="radio" id="class-6" name="class" value="Class 6">
+        <label for="class-6">Class 6</label><br>
+        <input type="radio" id="class-7" name="class" value="Class 7">
+        <label for="class-7">Class 7</label><br>
+        <input type="radio" id="class-8" name="class" value="Class 8">
+        <label for="class-8">Class 8</label><br>
+        <input type="radio" id="class-9" name="class" value="Class 9">
+        <label for="class-9">Class 9</label><br>
+        <input type="radio" id="class-10" name="class" value="Class 10">
+        <label for="class-10">Class 10</label><br>
+        <input type="radio" id="class-11" name="class" value="Class 11">
+        <label for="class-11">Class 11</label><br>
+        <input type="radio" id="class-12" name="class" value="Class 12">
+        <label for="class-12">Class 12</label>
+      </div>
+      <br><br>
+      <button type="button" id="back-button" onclick="location.href='1login.html'" >Back</button>
+      <button type="button" id="continue-button" onclick="location.href='Session.html'">Continue</button>
+    </form>
+   </div>
+   </div>
+   </div>
+   </div>
+ 
+
+  
+
+</body>
+</html>

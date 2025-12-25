@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard (Mobile Frame)</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      
+    }
+
+    /* Mobile frame */
+    .phone-frame {
+      width: 350px;
+      height: 600px;
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+      
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .notch {
+      width: 160px;
+      height: 25px;
+      background: #000;
+      border-radius: 12px;
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+
+    /* Top nav for mobile */
+    .topbar {
+      background: #2c3e50;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 35px; /* notch ke niche space */
+      z-index: 1;
+    }
+
+   
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 0;
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .nav-links a:hover {
+      background: #2c3e50;
+    }
+
+    .container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      margin-bottom: 12px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin: 4px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+
+    button {
+      width: 100%;
+      padding: 8px;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .danger {
+      background: #e74c3c;
+    }
+    .danger:hover {
+      background: #c0392b;
+    }
+
+    /* Table scroll */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    table th, table td {
+      padding: 6px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    table th {
+      background: #f0f0f0;
+    }
+    #back-button{
+      margin-left: 35%;
+      background: linear-gradient(135deg,#43f36c,#077831);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Notch -->
+    <div class="notch"></div>
+
+    <!-- Mobile top bar -->
+    <div class="topbar">⚙️ Admin Dashboard</div>
+    
+
+    <!-- Content -->
+    <div class="container">
+      <h1>Manage Users</h1>
+
+      <div class="card">
+        <form id="userForm">
+          <input type="text" id="userid" placeholder="Enter User ID" required>
+          <input type="text" id="username" placeholder="Enter Username" required>
+          <select id="role">
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+          </select>
+          <button type="submit">Add User</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <form id="removeForm">
+          <input type="text" id="removeId" placeholder="Enter User ID to remove" required>
+          <button type="submit" class="danger">Remove User</button>
+        </form>
+      </div>
+
+      <div class="card table-wrapper">
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>Username</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+        <button style="width:80px" type="button" id="back-button" onclick="location.href='1login.html'" >Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const userForm = document.getElementById("userForm");
+    const removeForm = document.getElementById("removeForm");
+    const userTable = document.getElementById("userTable").getElementsByTagName("tbody")[0];
+
+    let users = [
+      { id: "@student", username: "STUDENT NO1", role: "student" },
+      { id: "@teacher", username: "TEACHER NO1", role: "teacher" }
+    ];
+
+    function renderUsers() {
+      userTable.innerHTML = "";
+      users.forEach(user => {
+        let row = userTable.insertRow();
+        row.insertCell(0).innerText = user.id;
+        row.insertCell(1).innerText = user.username;
+        row.insertCell(2).innerText = user.role;
+      });
+    }
+
+    // Add user
+    userForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const id = document.getElementById("userid").value;
+      const username = document.getElementById("username").value;
+      const role = document.getElementById("role").value;
+
+      if (users.some(user => user.id === id)) {
+        alert("⚠️ User ID already exists!");
+        return;
+      }
+      users.push({ id, username, role });
+      userForm.reset();
+      renderUsers();
+    });
+
+    // Remove user by ID
+    removeForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const removeId = document.getElementById("removeId").value;
+
+      const index = users.findIndex(user => user.id === removeId);
+      if (index !== -1) {
+        users.splice(index, 1);
+        alert("✅ User removed!");
+      } else {
+        alert("❌ User ID not found!");
+      }
+
+      removeForm.reset();
+      renderUsers();
+    });
+
+    // Initial render
+    renderUsers();
+  </script>
+</body>
+</html>
